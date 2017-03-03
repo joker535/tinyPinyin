@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.content.Context;
+
 
 public class PinyinUtils {
 
@@ -63,22 +65,22 @@ public class PinyinUtils {
     private PinyinUtils() {
     }
 
-    public static synchronized PinyinUtils getInstance() {
+    public static synchronized PinyinUtils getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new PinyinUtils();
         }
-        loadData();
+        loadData(context);
         return sInstance;
     }
 
-    private static void loadData() {
+    private static void loadData(Context context ) {
         InputStream input = null;
         DataInputStream dataInput = null;
         try {
             if (isLoad) {
                 return;
             }
-            input= PinyinUtils.class.getClassLoader().getResourceAsStream("pinyinindex");
+            input= context.getAssets().open("pinyinindex");
             dataInput = new DataInputStream(input);
             long length = dataInput.available() >> 1;
             sPinyinIndex = new short[(int) length];
